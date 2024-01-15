@@ -33,20 +33,29 @@ const signup = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
     try {
         const { password,name}=req.body;
-        const user=await User.findOne({email:name}||{userName:name})
+        const user = await User.findOne({
+            $or: [
+              { email: name },    // Match by email
+              { userName: name }  // Match by userName
+            ]
+          });
         if(!user){
             throw new ApiError(401,"User doesn't exist")
         }
         if(user.password!=password){
             throw new ApiError(401,"password doesn't match")
         }
+        const user0 = await User.findById(user._id).select(
+            "-password -refreshToken"
+            );
+
         return res
         .status(200)
         .json(
             new ApiResponse(
                 200,
                 {
-                    user: user,
+                    user: user0,
                 },
                 "User successfully logged in"
             )
@@ -57,5 +66,9 @@ const login = asyncHandler(async (req, res) => {
     }
 
 });
+
+const profile=asyncHandler(async(req,res)=>{
+    
+})
 
 export { signup ,login};
