@@ -3,19 +3,18 @@ import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 
-const signup = asyncHandler(async (req, res) => {
+const signup = asyncHandler(async (req, res,next) => {
     try {
         const { userName, fullName, email, password, avatar } = req.body;
         if (!userName || !email || !password) {
-        throw new ApiError(401, "all the field are required");
+            throw new ApiError(401, "all the field are required");
         }
 
         const existingEmail = await User.findOne({ email });
         const existingUserName = await User.findOne({ userName });
         if (existingEmail || existingUserName) {
-        throw new ApiError(400, "user already existed");
+            throw new ApiError(400, "user already existed");
         }
-
         const newUser = new User({ userName, fullName, email, password, avatar });
         await newUser.save();
 
@@ -23,10 +22,13 @@ const signup = asyncHandler(async (req, res) => {
         "-password -refreshToken"
         );
 
-        return res.status(200).json(createdUser);
+        return res.status(200).json(new ApiResponse(200,createdUser,"User successfully created"));
+
     }catch (error) {
         console.log(error);
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(500).json(new ApiError(401,"something went wrong"));
+        // next(ApiError(300,"something went wrong"))
+        next()
     }
 });
 
