@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 // import svg from "../pages"
 function Signin() {
   return (
-    <div className="container  ">
+    <div className="container mx-auto max-w-lg ">
       
-      <div className="form-container text-left ">
-        <h2 className="text-5xl p-6">Signup</h2>
+      <div className="form-container text-left w-full">
+        <h2 className="text-5xl p-6 text-gray-900 text-center">Signup</h2>
         
         <form>
 
@@ -43,7 +43,7 @@ function Signin() {
         </form>
         <p className="p-5">
           Already have an account?{" "}
-          <Link to="/sign-in" className="pl-2 text-blue-700 hover:text-slate-100">
+          <Link to="/sign-in" className="pl-2 text-blue-200 hover:text-slate-100">
           {" "}
             Login
           </Link>
