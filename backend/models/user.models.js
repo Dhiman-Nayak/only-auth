@@ -31,21 +31,7 @@ const userSchema = new mongoose.Schema({
 },{timeseries:true})
 
 
-// userSchema.pre("save",(next)=>{
-//     const user = this;
-//     if(!user.isModified('password')){
-//         next()
-//         return;
-//     }
 
-//     try {
-//         const salt = 9;
-//         const genPassword= bcryptjs.hashSync(user.password,salt);
-//         user.password=genPassword;
-//     } catch (error) {
-//         next(error)
-//     }
-// })
 userSchema.pre("save",async function (next) {
     if(!this.isModified("password")) return next();
 

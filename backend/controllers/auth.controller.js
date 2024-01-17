@@ -13,7 +13,7 @@ const signup = asyncHandler(async (req, res,next) => {
         const existingEmail = await User.findOne({ email });
         const existingUserName = await User.findOne({ userName });
         if (existingEmail || existingUserName) {
-            throw new ApiError(400, "user already existed");
+            return res.json(new ApiError(400, "user already existed"));
         }
         const newUser = new User({ userName, fullName, email, password, avatar });
         await newUser.save();
@@ -28,7 +28,7 @@ const signup = asyncHandler(async (req, res,next) => {
         console.log(error);
         return res.status(500).json(new ApiError(401,"something went wrong"));
         // next(ApiError(300,"something went wrong"))
-        next()
+        // next()
     }
 });
 
