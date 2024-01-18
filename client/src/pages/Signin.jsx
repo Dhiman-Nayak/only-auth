@@ -36,7 +36,7 @@ function Signin() {
             className="w-50 p-2 "
           />
 
-          <button type="submit" className="bg-blue-700 rounded-3xl hover:bg-blue-900 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline-blue active:bg-blue-800 mt-5">
+          <button type="submit" className="bg-blue-700 rounded-3xl hover:bg-blue-900 text-white font-bold py-3 px-4 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 mt-5">
             Log in
           </button>
 
