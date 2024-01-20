@@ -2,18 +2,19 @@ import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
-
+import jwt from "jsonwebtoken"
+// ----------------------
+// ~~~ User Register
+// ----------------------
 const signup = asyncHandler(async (req, res,next) => {
     try {
         const {  fullName, email, password } = req.body;
-        // console.log("gg");
-        // console.log(req.body);
+        
         if (!fullName || !email || !password) {
             throw new ApiError(401, "all the field are required");
         }
 
         const existingEmail = await User.findOne({ email });
-        // const existingUserName = await User.findOne({ userName });
         if (existingEmail ) {
             return res.json(new ApiError(400, "user already existed"));
         }
@@ -34,6 +35,9 @@ const signup = asyncHandler(async (req, res,next) => {
     }
 });
 
+// ----------------------
+// ~~~ User Login
+// ----------------------
 const login = asyncHandler(async (req, res) => {
     try {
         const { password,name}=req.body;
@@ -43,18 +47,21 @@ const login = asyncHandler(async (req, res) => {
               { userName: name }  // Match by userName
             ]
           });
+
         if(!user){
             throw new ApiError(401,"User doesn't exist")
         }
-        if(user.password!=password){
-            throw new ApiError(401,"password doesn't match")
+        const isPasswordValid = await user.isPasswordCorrect(password);
+        if (!isPasswordValid) {
+            return res.json(new ApiError(400, "Password is not correct"));
         }
         const user0 = await User.findById(user._id).select(
             "-password -refreshToken"
-            );
-
+        );
+        const token= jwt.sign(user0._id, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
         return res
         .status(200)
+        .cookie("access-token",token)
         .json(
             new ApiResponse(
                 200,
@@ -71,8 +78,11 @@ const login = asyncHandler(async (req, res) => {
 
 });
 
+// ----------------------
+// ~~~ Get Profile
+// ----------------------
 const profile=asyncHandler(async(req,res)=>{
     
 })
 
-export { signup ,login};
+export { signup ,login,profile};

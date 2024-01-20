@@ -49,7 +49,7 @@ function Signin() {
             name="username"
             id="fullName"
             placeholder="Enter Full Name"
-            className="w-50 p-2 opacity-85"
+            className="w-50 p-2 opacity-85 focus:outline-none"
             onChange={handleChange}
           />
 
@@ -59,7 +59,7 @@ function Signin() {
             name="email"
             id="email"
             placeholder="Enter your Email"
-            className="w-50 p-2 opacity-85"
+            className="w-50 p-2 opacity-85 focus:outline-none"
             onChange={handleChange}
           />
 
@@ -69,7 +69,7 @@ function Signin() {
             name="password"
             id="password"
             placeholder="Enter password"
-            className="w-50 p-2 opacity-85"
+            className="w-50 p-2 opacity-85 focus:outline-none"
             onChange={handleChange}
           />
 
