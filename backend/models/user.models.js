@@ -2,15 +2,10 @@ import mongoose from "mongoose";
 import bcryptjs from "bcryptjs"
 
 const userSchema = new mongoose.Schema({
-    userName:{
-        type:String,
-        reuired:true,
-        unique:true
-    },
     fullName:{
         type:String,
         reuired:true,
-        unique:true
+        // unique:true
     },
     email:{
         type:String,
@@ -24,8 +19,8 @@ const userSchema = new mongoose.Schema({
     },
     avatar:{
         type:String,
-        reuired:true,
-        unique:true
+        // reuired:true,
+        // unique:true
     },
 
 },{timeseries:true})

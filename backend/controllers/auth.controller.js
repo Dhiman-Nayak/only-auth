@@ -5,17 +5,19 @@ import { ApiResponse } from "../utils/apiResponse.js";
 
 const signup = asyncHandler(async (req, res,next) => {
     try {
-        const { userName, fullName, email, password, avatar } = req.body;
-        if (!userName || !email || !password) {
+        const {  fullName, email, password } = req.body;
+        // console.log("gg");
+        // console.log(req.body);
+        if (!fullName || !email || !password) {
             throw new ApiError(401, "all the field are required");
         }
 
         const existingEmail = await User.findOne({ email });
-        const existingUserName = await User.findOne({ userName });
-        if (existingEmail || existingUserName) {
+        // const existingUserName = await User.findOne({ userName });
+        if (existingEmail ) {
             return res.json(new ApiError(400, "user already existed"));
         }
-        const newUser = new User({ userName, fullName, email, password, avatar });
+        const newUser = new User({  fullName, email, password });
         await newUser.save();
 
         const createdUser = await User.findById(newUser._id).select(
