@@ -1,9 +1,10 @@
 import React from "react";
 import "./signup.css"; // Import your component-specific CSS file
 // import backgroundImage from './backgroundImage.jpg';
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 // import svg from "../pages"
 function Signin() {
+  const naviate =useNavigate()
   const [formData, setFormData] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [error, seterror] = React.useState(null);
@@ -32,6 +33,7 @@ function Signin() {
       }
       seterror(false)
       setdata(Data.massage+"...")
+      naviate("/")
     } catch (error) {
       setLoading(false)
       seterror(true)
