@@ -1,6 +1,5 @@
 import React from "react";
-import "./signup.css"; // Import your component-specific CSS file
-// import backgroundImage from './backgroundImage.jpg';
+import "./signup.css"; 
 import { Link ,useNavigate} from "react-router-dom";
 // import svg from "../pages"
 function Signin() {
