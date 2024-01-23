@@ -1,22 +1,29 @@
 import React from "react";
 import "./signup.css"; 
 import { Link ,useNavigate} from "react-router-dom";
+import {signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
+import {  useDispatch, useSelector } from "react-redux";
 // import svg from "../pages"
 function Signin() {
   const naviate =useNavigate()
+  const dispatch=useDispatch()
   const [formData, setFormData] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
-  const [error, seterror] = React.useState(null);
+  // const [loading, setLoading] = React.useState(false);
+  // const [error, seterror] = React.useState(null);
+  const { loading, error,currentUser } = useSelector((state) => {
+    return state
+  });
   const [data, setdata] = React.useState(null)
   const handleChange=(e)=>{
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    console.log(formData);
+    
   }
   const handleSubmit=async (e)=>{
     e.preventDefault();
 
     try {
-      setLoading(true)
+      // setLoading(true)
+      dispatch(signInStart())
       const result = await fetch("http://localhost:8000/api/users/login", {
         method: "POST",
         headers: {
@@ -25,17 +32,25 @@ function Signin() {
         body: JSON.stringify(formData),
       })
       const Data = await result.json();
-      console.log( Data);
-      setLoading(false)
+      setdata(Data.massage+"...")
+      
+      console.log("data", data);
+      console.log( "currentUser",currentUser);
+      // setLoading(false)
+      dispatch(signInSuccess(Data))
       if(Data.success ==false){
-        seterror(true)
+        // seterror(true)
+        dispatch(signInFailure(Data))
       }
       seterror(false)
-      setdata(Data.massage+"...")
+      console.log(Data.massage+"...")
       naviate("/")
     } catch (error) {
-      setLoading(false)
-      seterror(true)
+      // setLoading(false)
+      // seterror(true)
+      dispatch(signInFailure(error))
+      console.log(error)
+      // setdata(error.error)
     }
   }
 
@@ -53,7 +68,7 @@ function Signin() {
             name="name"
             id="name"
             placeholder="Enter your Email or UserName"
-            className="w-50 p-2 opacity-85 focus:outline-none"
+            className="w-50 p-2 opacity-95 focus:outline-none"
             onChange={handleChange}
           />
 
