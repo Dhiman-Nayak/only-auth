@@ -5,7 +5,7 @@ import {signInFailure, signInStart, signInSuccess } from "../redux/user/userSlic
 import {  useDispatch, useSelector } from "react-redux";
 // import svg from "../pages"
 function Signin() {
-  const naviate =useNavigate()
+  const navigate =useNavigate()
   const dispatch=useDispatch()
   const [formData, setFormData] = React.useState({});
   // const [loading, setLoading] = React.useState(false);
@@ -33,18 +33,21 @@ function Signin() {
       })
       const Data = await result.json();
       setdata(Data.massage+"...")
-      
-      console.log("data", data);
-      console.log( "currentUser",currentUser);
+      console.log(Data,"+++",Data.massage);
       // setLoading(false)
-      dispatch(signInSuccess(Data))
-      if(Data.success ==false){
+      if(Data.success ==true){
         // seterror(true)
-        dispatch(signInFailure(Data))
-      }
-      seterror(false)
-      console.log(Data.massage+"...")
-      naviate("/")
+        
+        dispatch(signInSuccess(Data))
+        console.log("data", Data);
+        console.log("loading", loading);
+        console.log("error", error);
+        console.log( "currentUser",currentUser);
+        // seterror(false)
+        console.log(Data.massage+"...")
+        navigate("/")
+      }else{dispatch(signInFailure(Data))}
+      
     } catch (error) {
       // setLoading(false)
       // seterror(true)

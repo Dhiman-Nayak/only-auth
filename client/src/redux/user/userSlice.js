@@ -52,7 +52,7 @@ const userSlice = createSlice({
     },
     signInFailure: (state, action) => {
       state.error = true;
-      state.loading = false;  // Fix the typo here, change true to false
+      state.loading = false;  
       state.currentUser = action.payload;
     },
   },
