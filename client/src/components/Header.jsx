@@ -1,7 +1,11 @@
 // import React from 'react'
 import { Link } from 'react-router-dom';
+import {  useSelector } from 'react-redux';
+import Signin from '../pages/Signin';
 
 const Header = () => {
+  const {currentUser}=useSelector(state=>state.user)
+  console.log("cc",currentUser);
     const navbarStyle = {
       backgroundColor: "#616161", // Use your preferred color
       color: '#fff',
@@ -55,19 +59,21 @@ const Header = () => {
             </a>
           </li>
           </Link>
-          <Link to="/sign-in">
-          <li>
-            <a  style={{ ...navLinkStyle, ...hoverEffect }}>
-              Signin
-            </a>
-          </li>
-          </Link>
           <Link to="/profile">
           <li>
             <a  style={{ ...navLinkStyle, ...hoverEffect }}>
               Profile
             </a>
           </li>
+          </Link>
+          <Link to="/sign-in">
+          {/* <li> */}
+            {/* <a  style={{ ...navLinkStyle, ...hoverEffect }}> */}
+              {/* Signin */}
+              {currentUser? <img src={currentUser.avatar} className='rounded-full w-9 object-cover' />
+              :"Signinnn"}
+           
+          {/* </li> */}
           </Link>
         </ul>
       </nav>

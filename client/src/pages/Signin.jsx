@@ -38,8 +38,8 @@ function Signin() {
       if(Data.success ==true){
         // seterror(true)
         
-        dispatch(signInSuccess(Data))
-        // console.log("data", Data);
+        dispatch(signInSuccess(Data.data.user))
+        // console.log("data", Data.data.user);
         // console.log("loading", loading);
         // console.log("error", error);
         // console.log( "currentUser",currentUser);
