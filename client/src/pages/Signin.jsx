@@ -33,18 +33,18 @@ function Signin() {
       })
       const Data = await result.json();
       setdata(Data.massage+"...")
-      console.log(Data,"+++",Data.massage);
+      // console.log(Data,"+++",Data.massage);
       // setLoading(false)
       if(Data.success ==true){
         // seterror(true)
         
         dispatch(signInSuccess(Data))
-        console.log("data", Data);
-        console.log("loading", loading);
-        console.log("error", error);
-        console.log( "currentUser",currentUser);
+        // console.log("data", Data);
+        // console.log("loading", loading);
+        // console.log("error", error);
+        // console.log( "currentUser",currentUser);
         // seterror(false)
-        console.log(Data.massage+"...")
+        // console.log(Data.massage+"...")
         navigate("/")
       }else{dispatch(signInFailure(Data))}
       
@@ -52,7 +52,7 @@ function Signin() {
       // setLoading(false)
       // seterror(true)
       dispatch(signInFailure(error))
-      console.log(error)
+      // console.log(error)
       // setdata(error.error)
     }
   }
