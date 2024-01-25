@@ -3,20 +3,17 @@ import "./signup.css";
 import { Link ,useNavigate} from "react-router-dom";
 import {signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
 import {  useDispatch, useSelector } from "react-redux";
-// import svg from "../pages"
+
 function Signin() {
   const navigate =useNavigate()
   const dispatch=useDispatch()
   const [formData, setFormData] = React.useState({});
-  // const [loading, setLoading] = React.useState(false);
-  // const [error, seterror] = React.useState(null);
-  const { loading, error,currentUser } = useSelector((state) => {
-    return state
-  });
   const [data, setdata] = React.useState(null)
+  const [loading, setLoading] = React.useState(false);
+
+  const {  error,currentUser } =useSelector((state) => state);
   const handleChange=(e)=>{
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    
   }
   const handleSubmit=async (e)=>{
     e.preventDefault();
@@ -92,7 +89,7 @@ function Signin() {
         </form>
         <p className="p-5 ">
           Don't have an account?{" "}
-          <Link to="/sign-up" className="pl-2 text-blue-200 hover:text-slate-100">
+          <Link to="/sign-up" className="pl-2 text-blue-600 hover:text-slate-100">
           {" "}
             Signup
           </Link>

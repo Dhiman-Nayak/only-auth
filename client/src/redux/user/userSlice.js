@@ -53,7 +53,7 @@ const userSlice = createSlice({
     signInFailure: (state, action) => {
       state.error = true;
       state.loading = false;  
-      state.currentUser = action.payload;
+      // state.currentUser = action.payload;
     },
   },
 });

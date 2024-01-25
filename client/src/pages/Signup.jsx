@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import "./signup.css"; // Import your component-specific CSS file
-// import backgroundImage from './backgroundImage.jpg';
+import "./signup.css"; 
 import { Link,useNavigate } from "react-router-dom";
+import {signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
+import {  useDispatch, useSelector } from "react-redux";
 
 function Signin() {
   const navigate=useNavigate();
+  const dispatch=useDispatch()
   const [formData, setFormData] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
-  const [error, seterror] = React.useState(null);
   const [data, setdata] = React.useState(null)
+  const [loading, setLoading] = React.useState(false);
+  // const [error, seterror] = React.useState(null);
+  const {  error,currentUser } = useSelector((state) => state);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    console.log(formData);
+    // console.log(formData);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true)
+      dispatch(signInStart())
       const result = await fetch("http://localhost:8000/api/users/signup", {
         method: "POST",
         headers: {
@@ -26,16 +30,22 @@ function Signin() {
       })
       const Data = await result.json();
       console.log( Data);
+      setdata(Data.massage)
       setLoading(false)
-      if(Data.success ==false){
-        seterror(true)
+      if(Data.success ==true){
+        // seterror(false)
+        // setdata(Data.massage+"...")
+        dispatch(signInSuccess(Data.data.user))
+        navigate("/signin")
+        
+      }else{
+        // seterror(true)
+        dispatch(signInFailure(error))
       }
-      seterror(false)
-      setdata(Data.massage+"...")
-      navigate("/signin")
     } catch (error) {
-      setLoading(false)
-      seterror(true)
+      // setLoading(false)
+      // seterror(true)
+      dispatch(signInFailure(error))
     }
   };
 

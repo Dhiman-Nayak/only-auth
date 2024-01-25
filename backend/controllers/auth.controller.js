@@ -11,7 +11,8 @@ const signup = asyncHandler(async (req, res, next) => {
     const { fullName, email, password } = req.body;
 
     if (!fullName || !email || !password) {
-      throw new ApiError(401, "all the field are required");
+      // throw new ApiError(401, "");
+      return res.json(new ApiError(400, "all the field are required"));
     }
 
     const existingEmail = await User.findOne({ email });

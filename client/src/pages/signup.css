@@ -6,11 +6,13 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-image: url('./signupback.webp');
-    background-size: cover; /* Adjust as needed */
-    background-position: center center; /* Adjust as needed */
-    background-repeat: no-repeat; /* Adjust as needed */
-    background-attachment: fixed; /* Fix the background image */
+    /* background-image: url('./signupback.webp');
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;  */
+    background: rgb(211,162,183);
+    background: radial-gradient(circle,rgba(211,162,183,1) 5%,rgba(18,109,215,1) 97%);
     text-align: center;
   }
   
