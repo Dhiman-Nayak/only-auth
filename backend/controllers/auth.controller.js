@@ -51,7 +51,7 @@ const login = asyncHandler(async (req, res) => {
     });
 
     if (!user) {
-      return res.json( new ApiError(401, "User doesn't exist"))
+      return res.json(new ApiError(401, "User doesn't exist"));
     }
     const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) {
@@ -60,20 +60,24 @@ const login = asyncHandler(async (req, res) => {
     const user0 = await User.findById(user._id).select("-password  ");
 
     const payload = user0._id.toString();
-    const expiresIn = Math.floor(Date.now() / 1000) + 60 * 60 * 60;
+    // const expiresIn = Math.floor(Date.now() / 1000) + 60 * 60 * 60;
+    const expiresIn="7d"
     const token = jwt.sign(
       {
         data: payload,
       },
-      "secret",
+      process.env.JWT_SECRET_KEY,
       { expiresIn }
     );
-    console.log(token);
-    return (
-      res
+    console.log(token,"+++++",payload);
+    return res
         .status(200)
         // .cookie("access-token",token)
-        .cookie("access-token", token, { httpOnly: true, secure: true })
+        .cookie("accessToken", token,{
+          // sameSite: 'None',
+          secure: true,
+          httpOnly:true
+        })
         .json(
           new ApiResponse(
             200,
@@ -83,7 +87,7 @@ const login = asyncHandler(async (req, res) => {
             "User successfully logged in"
           )
         )
-    );
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal Server Error sign in" });
