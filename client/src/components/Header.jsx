@@ -5,7 +5,7 @@ import Signin from "../pages/Signin";
 import "./Header.css"
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
-  console.log("cc", currentUser);
+  // console.log("cc", currentUser);
   const navbarStyle = {
     backgroundColor: "#616161", // Use your preferred color
     color: "#fff",
@@ -100,7 +100,7 @@ const Header = () => {
               className="rounded-full w-9 object-cover"
             />
           ) : (
-            <div className="bg-pink-400 p-2 pl-4 pr-4 w-max rounded-full">Signin</div>
+            <div className="bg-pink-400 p-2 pl-4 pr-4 w-max rounded-full hover:bg-pink-500">Signin</div>
           )}
         </Link>
       </ul>

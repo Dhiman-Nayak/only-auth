@@ -19,7 +19,7 @@ function Signin() {
     e.preventDefault();
 
     try {
-      // setLoading(true)
+      setLoading(true)
       dispatch(signInStart())
       const result = await fetch("http://localhost:8000/api/users/login", {
         method: "POST",
@@ -30,8 +30,8 @@ function Signin() {
       })
       const Data = await result.json();
       setdata(Data.massage+"...")
-      // console.log(Data,"+++",Data.massage);
-      // setLoading(false)
+      console.log(Data,"+++",Data.massage);
+      setLoading(false)
       if(Data.success ==true){
         // seterror(true)
         
@@ -46,7 +46,7 @@ function Signin() {
       }else{dispatch(signInFailure(Data))}
       
     } catch (error) {
-      // setLoading(false)
+      setLoading(false)
       // seterror(true)
       dispatch(signInFailure(error))
       // console.log(error)
