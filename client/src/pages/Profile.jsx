@@ -24,11 +24,12 @@ function Profile() {
   const handleDelete=async ()=>{
     try {
       dispatch(deleteUserStart())
-      const res= await fetch(`http://localhost:8000/users/delete/${currentUser._id}`,{
+      const res= await fetch(`http://localhost:8000/api/users/delete/${currentUser._id}`,{
         method:'DELETE',
       })
       const data=await res.json()
-      console.log(data);
+      const token = Cookies.get();
+      console.log(data,"token",token);
       if(data.success==false){
         dispatch(deleteUserFailure())
         navigate("/profile")
@@ -87,7 +88,7 @@ function Profile() {
               Change Password
             </Link>
           </div>
-          <button className="uppercase bg-slate-600 text-white rounded-lg hover:opacity-85 p-3 ml-40 mr-40">
+          <button className="uppercase bg-slate-600 text-white rounded-full hover:opacity-85 p-3 ml-40 mr-40">
             update
           </button>
         </form>

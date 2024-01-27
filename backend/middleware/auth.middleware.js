@@ -2,11 +2,13 @@ import {User} from "../models/user.models.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
+import Cookies from 'js-cookie';
 
 const verifyJWT=asyncHandler(async(req,res,next)=>{
     try {
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
-        console.log("gg",req.cookies);
+        const token = Cookies.get();
+        // const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
+        console.log("gg",token,"gg",req.Cookies,req.cookies,req.cookies.accessToken);
         if(!token){
             return res.status(400).json(new ApiError(400,"Unauthorised request"))
         }

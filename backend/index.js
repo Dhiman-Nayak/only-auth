@@ -23,7 +23,7 @@ connectDB().then(()=>{
 
 const __dirname=path.resolve();
 app.use(express.static(path.join(__dirname,'/client/dist')))
-app.use("/users",userRoute)
+app.use("/api/users",userRoute)
 app.use("/api/users",authRoute)
 
 app.get("*",(req,res)=>{
