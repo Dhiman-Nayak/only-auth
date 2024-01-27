@@ -1,12 +1,26 @@
 import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {Link} from "react-router-dom"
-import { deleteUserFailure,deleteUserStart,deleteUserSuccess } from "../redux/user/userSlice";
+import {Link,useNavigate} from "react-router-dom"
+import { deleteUserFailure,deleteUserStart,deleteUserSuccess,signOut } from "../redux/user/userSlice";
+import Cookies from 'js-cookie';
+
 function Profile() {
   const dispatch = useDispatch()
+  const navigate=useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null);
 
+  const handleSignOut=async ()=>{
+    try {
+      
+      await fetch("http://localhost:8000/api/users/signout")
+      dispatch(signOut())
+      Cookies.remove('accessToken')
+      navigate("/signin")
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const handleDelete=async ()=>{
     try {
       dispatch(deleteUserStart())
@@ -17,8 +31,12 @@ function Profile() {
       console.log(data);
       if(data.success==false){
         dispatch(deleteUserFailure())
+        navigate("/profile")
+      }else{
+        Cookies.remove('accessToken')
+        navigate("/signin")
+        dispatch(deleteUserSuccess(data))
       }
-      dispatch(deleteUserSuccess(data))
     } catch (error) {
       dispatch(deleteUserFailure())
     }
@@ -36,7 +54,7 @@ function Profile() {
           />
           <img
             className="w-36 h-36 self-center rounded-full object-cover cursor-pointer"
-            src={currentUser.avatar}
+            src={currentUser ? currentUser.avatar : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBXNuO6PezhC18aYH_2cYtS0I7KbxoKYdwA&usqp=CAU"}
             alt="Profile img"
             onClick={() => fileRef.current.click()}
           />
@@ -76,7 +94,7 @@ function Profile() {
 
         <div className="flex justify-between m-10 text-2xl cursor-pointer ">
           <span className="text-red-500 " onClick={handleDelete}>Delete Account</span>
-          <span className="text-red-500 ">Sign Out</span>
+          <span className="text-red-500 "onClick={handleSignOut}>Sign Out</span>
         </div>
       </div>
     </>

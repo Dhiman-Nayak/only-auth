@@ -7,6 +7,7 @@ dotenv.config()
 import connectDB from "./db/index.js"
 import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
+import path from "path"
 
 app.use(cookieParser())
 app.use(express.json())
@@ -20,5 +21,11 @@ connectDB().then(()=>{
     console.log("MONGO db connection failed !!! ", err);
 })
 
+const __dirname=path.resolve();
+app.use(express.static(path.join(__dirname,'/client/dist')))
 app.use("/users",userRoute)
 app.use("/api/users",authRoute)
+
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','index.html'))
+})

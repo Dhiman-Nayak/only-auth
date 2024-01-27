@@ -70,19 +70,15 @@ const login = asyncHandler(async (req, res) => {
       { expiresIn }
     );
     console.log(token,"+++++",payload);
-    return res
+    // .cookie("access-token",token)
+    return res.cookie('accessToken', token, {  httpOnly: true })
         .status(200)
-        // .cookie("access-token",token)
-        .cookie("accessToken", token,{
-          // sameSite: 'None',
-          secure: true,
-          httpOnly:true
-        })
         .json(
           new ApiResponse(
             200,
             {
               user: user0,
+              token
             },
             "User successfully logged in"
           )
@@ -102,4 +98,8 @@ const profile = asyncHandler(async (req, res) => {
   res.status(200).json("hi");
 });
 
-export { signup, login, profile };
+const signout = asyncHandler(async (req, res) => {
+  return res.clearCookie("accessToken").json(new ApiResponse(200,"signout success"))
+});
+
+export { signup, login, profile ,signout};

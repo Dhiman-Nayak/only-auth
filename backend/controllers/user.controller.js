@@ -32,18 +32,29 @@ const updateUserPassword=asyncHandler(async (req,res)=>{
 
 
 const deleteUser=asyncHandler(async (req,res)=>{
-    console.log("gg");
-    // if(req.user.id !==req.params.id){
-    //     return res.json(new ApiError(401,"you can delete only your account"))
-    // }
-    try {
-        await User.findByIdAndDelete(req.params.id)
-        return res.status(200).json(new ApiError(200,"Account has benn deleted"))
-    } catch (error) {
-        console.log(error);
-        return res.status(402).json(new ApiError(200,error))
-        
+    const userId = req.params.id;
+
+  try {
+    // Check if the user exists
+    const user = await User.findById(userId);
+    console.log("user->",user);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
+    console.log("req.user.id->",req.user.id);
+    // Check if the authenticated user is the owner of the account
+    if (req.user.id !== userId) {
+      return res.status(403).json({ success: false, message: 'You can delete only your account' });
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ success: true, message: 'User deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 
 });
 
