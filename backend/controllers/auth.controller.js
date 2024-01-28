@@ -69,7 +69,7 @@ const login = asyncHandler(async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn }
     );
-    console.log(token,"+++++",payload);
+    // console.log(token,"+++++",payload);
     // .cookie("access-token",token)
     return res.cookie('accessToken', token, {  httpOnly: true })
         .status(200)

@@ -9,7 +9,9 @@ function Profile() {
   const navigate=useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null);
-
+        
+  const cookiess = Cookies.get();
+  
   const handleSignOut=async ()=>{
     try {
       
@@ -24,12 +26,11 @@ function Profile() {
   const handleDelete=async ()=>{
     try {
       dispatch(deleteUserStart())
-      const res= await fetch(`http://localhost:8000/api/users/delete/${currentUser._id}`,{
+      const res= await fetch(`http://localhost:8000/api/users/delete/${currentUser._id}/${cookiess.accessToken}`,{
         method:'DELETE',
       })
       const data=await res.json()
-      const token = Cookies.get();
-      console.log(data,"token",token);
+      // console.log("data->",data);      
       if(data.success==false){
         dispatch(deleteUserFailure())
         navigate("/profile")

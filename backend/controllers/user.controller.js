@@ -37,16 +37,16 @@ const deleteUser=asyncHandler(async (req,res)=>{
   try {
     // Check if the user exists
     const user = await User.findById(userId);
-    console.log("user->",user);
+    // console.log("user->",user);
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-    console.log("req.user.id->",req.user.id);
+    // console.log("req.user.id->",req.user.id);
     // Check if the authenticated user is the owner of the account
     if (req.user.id !== userId) {
       return res.status(403).json({ success: false, message: 'You can delete only your account' });
     }
-
+    // console.log("req.user.id->",req.user);
     // Delete the user
     await User.findByIdAndDelete(userId);
 

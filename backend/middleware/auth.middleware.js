@@ -6,16 +6,16 @@ import Cookies from 'js-cookie';
 
 const verifyJWT=asyncHandler(async(req,res,next)=>{
     try {
-        const token = Cookies.get();
+        const token = req.params.cookies
         // const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
-        console.log("gg",token,"gg",req.Cookies,req.cookies,req.cookies.accessToken);
+        // console.log("gg",req.params,req.originalUrl,"**","",req.url);
         if(!token){
             return res.status(400).json(new ApiError(400,"Unauthorised request"))
         }
     
         const decodeToken = jwt.verify(token,process.env.JWT_SECRET_KEY)    
-        console.log(process.env.JWT_SECRET_KEY);
-        const user =await User.findById(decodeToken?._id).select("-password -refreshToken")
+        // console.log(decodeToken);
+        const user =await User.findById(decodeToken?.data).select("-password -refreshToken")
         if(!user){
             return res.json(new ApiError(400,"Invalid access token"))
         }

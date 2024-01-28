@@ -34,7 +34,7 @@ function Signin() {
       });
       const Data = await result.json();
       setdata(Data.massage + "...");
-      console.log(Data, "+++", Data.massage);
+      // console.log(Data, "+++", Data.massage);
       setLoading(false);
       if (Data.success == true) {
         // seterror(true)
