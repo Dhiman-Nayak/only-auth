@@ -8,10 +8,21 @@ import connectDB from "./db/index.js"
 import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
 import path from "path"
-
+// import { auth } from 'express-openid-connect';
+import {auth } from 'express-openid-connect'
+const configg = {
+    authRequired: process.env.authRequired,
+    auth0Logout: true,
+    secret: process.env.secret,
+    baseURL: process.env.baseURL,
+    clientID: process.env.clientID,
+    issuerBaseURL: process.env.issuerBaseURL
+  };
+console.log(process.env.baseURL,"gg");
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
+app.use(auth(configg));
 
 connectDB().then(()=>{
     app.listen(process.env.PORT,()=>{
@@ -26,6 +37,22 @@ app.use(express.static(path.join(__dirname,'/client/dist')))
 app.use("/api/users",userRoute)
 app.use("/api/users",authRoute)
 
-app.get("*",(req,res)=>{
-    res.sendFile(path.join(__dirname,'client','index.html'))
-})
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.join(__dirname,'client','index.html'))
+// })
+function requiresAuth() {
+    return (req, res, next) => {
+      if (req.oidc.isAuthenticated()) {
+        return next(); // User is authenticated, proceed to the next middleware/route
+      } else {
+        res.redirect('/login'); // User is not authenticated, redirect to the login page
+      }
+    };
+  }
+app.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  });
+
+app.get('/profile', requiresAuth(), (req, res) => {
+    res.send(JSON.stringify(req.oidc.user, null, 2));
+});
