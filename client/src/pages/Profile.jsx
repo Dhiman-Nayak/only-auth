@@ -30,10 +30,10 @@ function Profile() {
         method:'DELETE',
       })
       const data=await res.json()
-      // console.log("data->",data);      
+           
       if(data.success==false){
         dispatch(deleteUserFailure())
-        navigate("/profile")
+        navigate("/errorlogin")
       }else{
         Cookies.remove('accessToken')
         navigate("/signin")

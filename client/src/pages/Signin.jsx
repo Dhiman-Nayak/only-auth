@@ -15,7 +15,7 @@ function Signin() {
   const [data, setdata] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
-  const { error, currentUser } = useSelector((state) => state);
+  // const { error, currentUser } = useSelector((state) => state);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
