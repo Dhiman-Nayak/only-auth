@@ -7,8 +7,11 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { useAuth0 } from "@auth0/auth0-react";
+
 function Signin() {
+  const { loginWithRedirect, user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({});
@@ -38,7 +41,7 @@ function Signin() {
       setLoading(false);
       if (Data.success == true) {
         // seterror(true)
-        Cookies.set('accessToken', Data.data.token, { expires: 10});
+        Cookies.set("accessToken", Data.data.token, { expires: 10 });
         dispatch(signInSuccess(Data.data.user));
         // console.log("data", Data.data.user);
         // console.log("loading", loading);
@@ -94,6 +97,7 @@ function Signin() {
           </button>
           <p className="text-red-800 ">{data}</p>
         </form>
+        <button onClick={(e) => loginWithRedirect()} className="bg-green-500 w-full rounded-full p-4 text-center text-white mx-auto">Login with Auth0</button>
         <p className="p-5 ">
           Don't have an account?{" "}
           <Link
