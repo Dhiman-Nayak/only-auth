@@ -8,10 +8,11 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth0 } from "@auth0/auth0-react";
 
 function Signin() {
-  const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+  // const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+  // console.log(user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({});
@@ -61,7 +62,12 @@ function Signin() {
       // setdata(error.error)
     }
   };
-
+// const auth0Loginn=()=>{
+//   loginWithRedirect()
+// } 
+// const sendData=()=>{
+//   console.log(user);
+// }
   return (
     <div className="container mx-auto max-w-lg ">
       <div className="form-container text-left w-full">
@@ -97,7 +103,7 @@ function Signin() {
           </button>
           <p className="text-red-800 ">{data}</p>
         </form>
-        <button onClick={(e) => loginWithRedirect()} className="bg-green-500 w-full rounded-full p-4 text-center text-white mx-auto">Login with Auth0</button>
+        {/* <button onClick={() => {auth0Loginn;sendData}} className="bg-green-500 w-full rounded-full p-4 text-center text-white mx-auto">Login with Auth0</button> */}
         <p className="p-5 ">
           Don't have an account?{" "}
           <Link

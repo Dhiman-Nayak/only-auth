@@ -11,8 +11,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <PersistGate persistor={persistor} loading={null}>
       <Auth0Provider
-        domain="dev-1u3daochbh6ooxt3.us.auth0.com"
-        clientId="SsWDVWxwXJGO5mrQNL0BpmB0mJMfPPie"
+        domain="dev-cyom0m1ihxofj0cw.us.auth0.com"
+        clientId="IUYNvnraFtd7eptaghLb7erwHWZsvylF"
         authorizationParams={{
           redirect_uri: window.location.origin,
         }}

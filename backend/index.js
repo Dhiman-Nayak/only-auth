@@ -10,19 +10,19 @@ import authRoute from "./routes/auth.route.js";
 import path from "path"
 // import { auth } from 'express-openid-connect';
 import {auth } from 'express-openid-connect'
+console.log(process.env.issuerBaseURL);
 const configg = {
-    authRequired: process.env.authRequired,
+    authRequired: false,
     auth0Logout: true,
     secret: process.env.secret,
     baseURL: process.env.baseURL,
     clientID: process.env.clientID,
     issuerBaseURL: process.env.issuerBaseURL
   };
-console.log(process.env.baseURL,"gg");
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
-app.use(auth(configg));
+app.use(auth(configg))
 
 connectDB().then(()=>{
     app.listen(process.env.PORT,()=>{
@@ -54,5 +54,8 @@ app.get('/', (req, res) => {
   });
 
 app.get('/profile', requiresAuth(), (req, res) => {
-    res.send(JSON.stringify(req.oidc.user, null, 2));
-});
+    
+    console.log(JSON.stringify(req.oidc.user));
+    console.log(res);
+    res.send(JSON.stringify(req.oidc.user));
+}); 
