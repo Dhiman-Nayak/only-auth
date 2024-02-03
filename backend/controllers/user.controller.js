@@ -1,6 +1,7 @@
 import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { uploadCloudinary } from "../utils/cloudinary.js";
 
 const updateUser = asyncHandler(async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(req.params.id, {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -8,18 +8,58 @@ import {
   signOut,
 } from "../redux/user/userSlice";
 import Cookies from "js-cookie";
+import { Client, Storage, ID, Permission, Role } from "appwrite";
 
 function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null);
-
+  
   const cookiess = Cookies.get();
-
+  
   const [email, setEmail] = useState(currentUser.email);
   const [fullName, setFullName] = useState(currentUser.fullName);
+  const [avatar, setavatar] = useState(undefined);
+  const [formData, setFormData] = useState({"email":email,"fullName":fullName})
+  
+  console.log(formData);
+  useEffect(() => {
+    if (avatar) {
+      handleFileUpload(avatar);
+    }
+    // return () => {
+    //   second
+    // }
+  }, [avatar]);
 
+  const handleFileUpload = (pic) => {
+    const client = new Client()
+      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setProject("65ba7c592323b0740d25");
+
+    const storage = new Storage(client);
+
+    const promise = storage.createFile(
+      "65bdda1f0177f296430e",
+      ID.unique(),
+      document.getElementById("uploader").files[0],
+      [
+        Permission.write(Role.any()), // Writers can update this document
+      ]
+    );
+
+    promise.then(
+      function (response) {
+
+        console.log(response); // Success
+        setFormData({ ...formData, "avatar": `https://cloud.appwrite.io/v1/storage/buckets/65bdda1f0177f296430e/files/${response.$id}/view?project=65ba7c592323b0740d25&mode=admin` });
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
   const handleSignOut = async () => {
     try {
       await fetch("http://localhost:8000/api/users/signout");
@@ -55,8 +95,11 @@ function Profile() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fullName, email);
+    console.log(fullName, email, avatar);
   };
+  const handleChange =(e)=>{
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  }
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -67,13 +110,13 @@ function Profile() {
             ref={fileRef}
             className="hidden"
             accept="image/*"
+            onChange={(e) => setavatar(e.target.files[0])}
+            id="uploader"
           />
           <img
             className="w-36 h-36 self-center rounded-full object-cover cursor-pointer"
             src={
-              currentUser
-                ? currentUser.avatar
-                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzBXNuO6PezhC18aYH_2cYtS0I7KbxoKYdwA&usqp=CAU"
+              formData.avatar ||currentUser.avatar
             }
             alt="Profile img"
             onClick={() => fileRef.current.click()}
@@ -83,7 +126,7 @@ function Profile() {
             defaultValue={fullName}
             id="fullName"
             placeholder="Full Name"
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={handleChange}
             className="rounded-lg p-3 bg-slate-100 m-2 opacity-85 focus:outline-none"
           />
           <input
@@ -92,7 +135,7 @@ function Profile() {
             id="email"
             placeholder="Email"
             // disabled="true"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
             className="rounded-lg p-3 bg-slate-100 m-2 opacity-85 focus:outline-none"
           />
 
