@@ -15,15 +15,17 @@ function Profile() {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null);
-  
   const cookiess = Cookies.get();
-  
+
   const [email, setEmail] = useState(currentUser.email);
   const [fullName, setFullName] = useState(currentUser.fullName);
   const [avatar, setavatar] = useState(undefined);
-  const [formData, setFormData] = useState({"email":email,"fullName":fullName})
-  
-  console.log(formData);
+  const [formData, setFormData] = useState({
+    email: email,
+    fullName: fullName,
+    avatar: currentUser.avatar,
+  });
+
   useEffect(() => {
     if (avatar) {
       handleFileUpload(avatar);
@@ -51,9 +53,11 @@ function Profile() {
 
     promise.then(
       function (response) {
-
         console.log(response); // Success
-        setFormData({ ...formData, "avatar": `https://cloud.appwrite.io/v1/storage/buckets/65bdda1f0177f296430e/files/${response.$id}/view?project=65ba7c592323b0740d25&mode=admin` });
+        setFormData({
+          ...formData,
+          avatar: `https://cloud.appwrite.io/v1/storage/buckets/65bdda1f0177f296430e/files/${response.$id}/view?project=65ba7c592323b0740d25&mode=admin`,
+        });
       },
       function (error) {
         console.log(error); // Failure
@@ -93,13 +97,43 @@ function Profile() {
       dispatch(deleteUserFailure());
     }
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(fullName, email, avatar);
+    try {
+      // setLoading(true);
+      // dispatch(signInStart());
+      const result = await fetch(
+        `http://localhost:8000/api/users/update/${currentUser._id}/${cookiess.accessToken}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      const Data = await result.json();
+      // setdata(Data.massage + "...");
+      console.log(Data, "+++", Data.massage);
+      // setLoading(false);
+      if (Data.success == true) {
+        
+        navigate("/profile");
+      } else {
+        // dispatch(signInFailure(Data));
+      }
+    } catch (error) {
+      // setLoading(false);
+      // seterror(true)
+      console.log(error);
+      // dispatch(signInFailure(error));
+      // console.log(error)
+      // setdata(error.error)
+    }
   };
-  const handleChange =(e)=>{
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-  }
+  };
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -115,9 +149,7 @@ function Profile() {
           />
           <img
             className="w-36 h-36 self-center rounded-full object-cover cursor-pointer"
-            src={
-              formData.avatar ||currentUser.avatar
-            }
+            src={formData.avatar || currentUser.avatar}
             alt="Profile img"
             onClick={() => fileRef.current.click()}
           />

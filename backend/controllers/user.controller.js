@@ -2,14 +2,17 @@ import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
-
+import { ApiResponse } from "../utils/apiResponse.js";
 const updateUser = asyncHandler(async (req, res) => {
+  const {avatar,email,fullName}=req.body;
   const updatedUser = await User.findByIdAndUpdate(req.params.id, {
     $set: {
-      fullName: req.body.fullName,
-      password: req.body.password,
+      fullName: fullName,
+      avatar: avatar,
+      email:email 
     },
-  });
+  }).select("-password");
+  return res.json(new ApiResponse(202, updateUser, "User updated successfully"))
 });
 
 const updateUserPassword = asyncHandler(async (req, res) => {
